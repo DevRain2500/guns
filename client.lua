@@ -2,6 +2,15 @@ local arCheckedOut = false
 local sgCheckedOut = false
 local playerPed = GetPlayerPed(-1)
 
+Citizen.CreateThread(function()
+    while true do
+        if IsControlJustPressed(0, 311) then
+            TriggerEvent("ShowInformationLeft", 2000, GetClosestVehicle(GetEntityCoords(GetPlayerPed(-1)), 2.0, GetHashKey("pd11"), 0))
+        end
+    end
+end)
+
+
 --Get guns via text commands
 RegisterCommand("sg", function()
     if not sgCheckedOut then
