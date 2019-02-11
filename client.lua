@@ -21,6 +21,7 @@ RegisterCommand("remove", function()
     removeWeapon("weapon_pumpshotgun")
     removeWeapon("weapon_carbinerifle")
     notify('~r~Removed Shotgun & Carbine Rifle.')
+end
 end)
 
 
