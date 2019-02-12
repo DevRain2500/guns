@@ -18,12 +18,27 @@ local pdModels = {
 
 }
 
-local function CheckPDVehicle()
-        for i=1, #pdModels do
-            local nearestCar = GetClosestVehicle(GetEntityCoords(GetPlayerPed(-1)), 2.0, GetHashKey(pdModels[i]), 0)
-            TriggerEvent("ShowInformationLeft", 2000, nearestCar)
-            if GetVehicleClass(nearestCar) == 18 then
+local function CheckPDVehicle(weapon)
+    for i=1, #pdModels do
+        local nearestCar = GetClosestVehicle(GetEntityCoords(GetPlayerPed(-1)), 2.0, GetHashKey(pdModels[i]), 0)
+        TriggerEvent("ShowInformationLeft", 2000, nearestCar)
+        if GetVehicleClass(nearestCar) == 18 then
             TriggerEvent("ShowInformationLeft", 2000, "This is emergency")
+            if weapon == "sg" then
+                giveWeapon("weapon_pumpshotgun")
+                GiveWeaponComponentToPed(playerPed, GetHashKey("weapon_pumpshotgun"), GetHashKey("COMPONENT_AT_AR_FLSH"))
+                TriggerEvent("ShowInformationLeft", 2000, "You grabbed your Shotgun...")
+                --notify('~g~Received Shotgun.')
+                sgCheckedOut = true
+            end
+            if weapon == "ar" then
+                giveWeapon("weapon_carbinerifle")
+                GiveWeaponComponentToPed(playerPed, GetHashKey("weapon_carbinerifle"), GetHashKey("COMPONENT_AT_AR_FLSH"))
+                GiveWeaponComponentToPed(playerPed, GetHashKey("weapon_carbinerifle"), GetHashKey("COMPONENT_AT_SCOPE_MEDIUM"))
+                TriggerEvent("ShowInformationLeft", 2000, "You grabbed your Carbine Rifle...")
+                --notify('~g~Received Carbine Rifle.')
+                arCheckedOut = true
+            end
         end
     end
 end
@@ -32,12 +47,7 @@ end
 RegisterCommand("sg", function()
     if not sgCheckedOut then
         if exports.GTALife:countItems("Police Key Card") >= 1 then
-            CheckPDVehicle()
-            giveWeapon("weapon_pumpshotgun")
-            GiveWeaponComponentToPed(playerPed, GetHashKey("weapon_pumpshotgun"), GetHashKey("COMPONENT_AT_AR_FLSH"))
-            TriggerEvent("ShowInformationLeft", 2000, "You grabbed your Shotgun...")
-            --notify('~g~Received Shotgun.')
-            sgCheckedOut = true
+            CheckPDVehicle("sg")
         end
     else
         removeWeapon("weapon_pumpshotgun")
@@ -50,13 +60,7 @@ end)
 RegisterCommand("ar", function()
     if not arCheckedOut then
         if exports.GTALife:countItems("Police Key Card") >= 1 then
-            CheckPDVehicle()
-            giveWeapon("weapon_carbinerifle")
-            GiveWeaponComponentToPed(playerPed, GetHashKey("weapon_carbinerifle"), GetHashKey("COMPONENT_AT_AR_FLSH"))
-            GiveWeaponComponentToPed(playerPed, GetHashKey("weapon_carbinerifle"), GetHashKey("COMPONENT_AT_SCOPE_MEDIUM"))
-            TriggerEvent("ShowInformationLeft", 2000, "You grabbed your Carbine Rifle...")
-            --notify('~g~Received Carbine Rifle.')
-            arCheckedOut = true
+            CheckPDVehicle("ar")
         end
     else
         removeWeapon("weapon_carbinerifle")
