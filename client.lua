@@ -25,8 +25,8 @@ local pdModels = {
 
 local function CheckPDVehicle(weapon)
     for i=1, #pdModels do
-        local nearestCar = GetClosestVehicle(GetEntityCoords(GetPlayerPed(-1)), 2.0, GetHashKey(pdModels[i]), 0)
-        if GetVehicleClass(nearestCar) == 18 then
+        local nearestCar = GetClosestVehicle(GetEntityCoords(playerPed), 2.0, GetHashKey(pdModels[i]), 0)
+        if GetVehicleClass(nearestCar) == 18 or IsPedInAnyPoliceVehicle(playerPed) then
             TriggerEvent("ShowInformationLeft", 2000, "This is emergency")
             TriggerEvent("ShowInformationLeft", 2000, nearestCar)
             if weapon == "sg" then
@@ -73,7 +73,7 @@ RegisterCommand("ar", function()
         end
     else
         removeWeapon("weapon_carbinerifle")
-        TriggerEvent("ShowInformationLeft", 2000, "You stowed Carbine Rifle...")
+        TriggerEvent("ShowInformationLeft", 2000, "You stowed your Carbine Rifle...")
         --notify('~r~Removed Carbine Rifle.')
         arCheckedOut = false
     end
