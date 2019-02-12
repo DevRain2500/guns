@@ -24,27 +24,34 @@ local pdModels = {
 }
 
 local function CheckPDVehicle(weapon)
+    if IsPedInAnyPoliceVehicle(playerPed) then
+        GiveWeapons(weapon)
+    end
     for i=1, #pdModels do
         local nearestCar = GetClosestVehicle(GetEntityCoords(playerPed), 2.0, GetHashKey(pdModels[i]), 0)
-        if GetVehicleClass(nearestCar) == 18 or IsPedInAnyPoliceVehicle(playerPed) then
+        if GetVehicleClass(nearestCar) == 18 then
             TriggerEvent("ShowInformationLeft", 2000, "This is emergency")
             TriggerEvent("ShowInformationLeft", 2000, nearestCar)
-            if weapon == "sg" then
-                giveWeapon("weapon_pumpshotgun")
-                GiveWeaponComponentToPed(playerPed, GetHashKey("weapon_pumpshotgun"), GetHashKey("COMPONENT_AT_AR_FLSH"))
-                TriggerEvent("ShowInformationLeft", 2000, "You grabbed your Shotgun...")
-                --notify('~g~Received Shotgun.')
-                sgCheckedOut = true
-            end
-            if weapon == "ar" then
-                giveWeapon("weapon_carbinerifle")
-                GiveWeaponComponentToPed(playerPed, GetHashKey("weapon_carbinerifle"), GetHashKey("COMPONENT_AT_AR_FLSH"))
-                GiveWeaponComponentToPed(playerPed, GetHashKey("weapon_carbinerifle"), GetHashKey("COMPONENT_AT_SCOPE_MEDIUM"))
-                TriggerEvent("ShowInformationLeft", 2000, "You grabbed your Carbine Rifle...")
-                --notify('~g~Received Carbine Rifle.')
-                arCheckedOut = true
-            end
+            GiveWeapons(weapon)
         end
+    end
+end
+
+local function GiveWeapons(weapon)
+    if weapon == "sg" then
+        giveWeapon("weapon_pumpshotgun")
+        GiveWeaponComponentToPed(playerPed, GetHashKey("weapon_pumpshotgun"), GetHashKey("COMPONENT_AT_AR_FLSH"))
+        TriggerEvent("ShowInformationLeft", 2000, "You grabbed your Shotgun...")
+        --notify('~g~Received Shotgun.')
+        sgCheckedOut = true
+    end
+    if weapon == "ar" then
+        giveWeapon("weapon_carbinerifle")
+        GiveWeaponComponentToPed(playerPed, GetHashKey("weapon_carbinerifle"), GetHashKey("COMPONENT_AT_AR_FLSH"))
+        GiveWeaponComponentToPed(playerPed, GetHashKey("weapon_carbinerifle"), GetHashKey("COMPONENT_AT_SCOPE_MEDIUM"))
+        TriggerEvent("ShowInformationLeft", 2000, "You grabbed your Carbine Rifle...")
+        --notify('~g~Received Carbine Rifle.')
+        arCheckedOut = true
     end
 end
 
