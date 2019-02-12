@@ -16,7 +16,7 @@ local pdModels = {
     "pd10",
     "pd11",
     "pdf350",
-
+    "policet",
 }
 
 local function CheckPDVehicle(weapon)
