@@ -2,19 +2,37 @@ local arCheckedOut = false
 local sgCheckedOut = false
 local playerPed = GetPlayerPed(-1)
 
-Citizen.CreateThread(function()
-    while true do
-        if IsControlJustPressed(0, 311) then
-            TriggerEvent("ShowInformationLeft", 2000, GetClosestVehicle(GetEntityCoords(GetPlayerPed(-1)), 2.0, GetHashKey("pd11"), 0))
+local pdModels = {
+
+    "pd1",
+    "pd2",
+    "pd3",
+    "pd4",
+    "pd5",
+    "pd6",
+    "pd7",
+    "pd8",
+    "pd9",
+    "pd10",
+    "pd11",
+
+}
+
+local function CheckPDVehicle()
+        for i=1, #pdModels do
+            local nearestCar = GetClosestVehicle(GetEntityCoords(GetPlayerPed(-1)), 2.0, GetHashKey(pdModels[i]), 0)
+            TriggerEvent("ShowInformationLeft", 2000, nearestCar)
+            if GetVehicleClass(nearestCar) == 18 then
+            TriggerEvent("ShowInformationLeft", 2000, "This is emergency")
         end
     end
-end)
-
+end
 
 --Get guns via text commands
 RegisterCommand("sg", function()
     if not sgCheckedOut then
         if exports.GTALife:countItems("Police Key Card") >= 1 then
+            CheckPDVehicle()
             giveWeapon("weapon_pumpshotgun")
             GiveWeaponComponentToPed(playerPed, GetHashKey("weapon_pumpshotgun"), GetHashKey("COMPONENT_AT_AR_FLSH"))
             TriggerEvent("ShowInformationLeft", 2000, "You grabbed your Shotgun...")
@@ -32,6 +50,7 @@ end)
 RegisterCommand("ar", function()
     if not arCheckedOut then
         if exports.GTALife:countItems("Police Key Card") >= 1 then
+            CheckPDVehicle()
             giveWeapon("weapon_carbinerifle")
             GiveWeaponComponentToPed(playerPed, GetHashKey("weapon_carbinerifle"), GetHashKey("COMPONENT_AT_AR_FLSH"))
             GiveWeaponComponentToPed(playerPed, GetHashKey("weapon_carbinerifle"), GetHashKey("COMPONENT_AT_SCOPE_MEDIUM"))
