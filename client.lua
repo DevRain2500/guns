@@ -17,16 +17,12 @@ local pdModels = {
     "pd11",
     "pdf350",
     "policet",
-    "unmarked1",
-    "unmarked2",
-    "unmarked3",
-    "unmarked4",
 }
 
 local function CheckPDVehicle(weapon)
     for i=1, #pdModels do
-        local nearestCar = GetClosestVehicle(GetEntityCoords(GetPlayerPed(-1)), 2.0, GetHashKey(pdModels[i]), 0)
-        if GetVehicleClass(nearestCar) == 18 then
+        local nearestCar = GetClosestVehicle(GetEntityCoords(playerPed), 2.0, GetHashKey(pdModels[i]), 0)
+        if GetVehicleClass(nearestCar) == 18 or IsPedInAnyPoliceVehicle(playerPed) then
             TriggerEvent("ShowInformationLeft", 2000, "This is emergency")
             TriggerEvent("ShowInformationLeft", 2000, nearestCar)
             if weapon == "sg" then
@@ -54,7 +50,7 @@ RegisterCommand("sg", function()
         if exports.GTALife:countItems("Police Key Card") >= 1 then
             CheckPDVehicle("sg")
         else
-            TriggerEvent("ShowInformationLeft", 3000, "The gun is locked in place...")
+            TriggerEvent("ShowInformationLeft", 3000, "The gun lock is locked...")
         end
     else
         removeWeapon("weapon_pumpshotgun")
@@ -69,7 +65,7 @@ RegisterCommand("ar", function()
         if exports.GTALife:countItems("Police Key Card") >= 1 then
             CheckPDVehicle("ar")
         else
-            TriggerEvent("ShowInformationLeft", 3000, "The gun is locked in place...")
+            TriggerEvent("ShowInformationLeft", 3000, "The gun lock is locked...")
         end
     else
         removeWeapon("weapon_carbinerifle")
