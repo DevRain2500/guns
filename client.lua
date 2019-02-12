@@ -1,5 +1,6 @@
-local arCheckedOut = false
-local sgCheckedOut = false
+local arCheckedOut
+local sgCheckedOut
+local nearestCar
 local playerPed = GetPlayerPed(-1)
 
 local pdModels = {
@@ -22,13 +23,24 @@ local pdModels = {
     "unmarked4",
 }
 
+Citizen.CreateThread(function()
+    while true do
+        Wait(100)
+        arCheckedOut = exports.GTALife:RevoDecorGet(nearestCar, "arEquiped")
+        sgCheckedOut = exports.GTALife:RevoDecorGet(nearestCar, "sgEquiped")
+        for i=1, #pdModels do
+            nearestCar = GetClosestVehicle(GetEntityCoords(playerPed), 2.0, GetHashKey(pdModels[i]), 0)
+        end
+    end
+end)
+
 local function GiveWeapons(weapon)
     if weapon == "sg" then
         giveWeapon("weapon_pumpshotgun")
         GiveWeaponComponentToPed(playerPed, GetHashKey("weapon_pumpshotgun"), GetHashKey("COMPONENT_AT_AR_FLSH"))
         TriggerEvent("ShowInformationLeft", 2000, "You grabbed your Shotgun...")
         --notify('~g~Received Shotgun.')
-        sgCheckedOut = true
+        sgCheckedOut = exports.GTALife:RevoDecorSet(nearestCar, "sgEquiped", true)
     end
     if weapon == "ar" then
         giveWeapon("weapon_carbinerifle")
@@ -36,7 +48,7 @@ local function GiveWeapons(weapon)
         GiveWeaponComponentToPed(playerPed, GetHashKey("weapon_carbinerifle"), GetHashKey("COMPONENT_AT_SCOPE_MEDIUM"))
         TriggerEvent("ShowInformationLeft", 2000, "You grabbed your Carbine Rifle...")
         --notify('~g~Received Carbine Rifle.')
-        arCheckedOut = true
+        arCheckedOut = exports.GTALife:RevoDecorSet(nearestCar, "arEquiped", true)
     end
 end
 
@@ -44,13 +56,10 @@ local function CheckPDVehicle(weapon)
     if IsPedInAnyPoliceVehicle(playerPed) then
         GiveWeapons(weapon)
     end
-    for i=1, #pdModels do
-        local nearestCar = GetClosestVehicle(GetEntityCoords(playerPed), 2.0, GetHashKey(pdModels[i]), 0)
-        if GetVehicleClass(nearestCar) == 18 then
-            TriggerEvent("ShowInformationLeft", 2000, "This is emergency")
-            TriggerEvent("ShowInformationLeft", 2000, nearestCar)
-            GiveWeapons(weapon)
-        end
+    if GetVehicleClass(nearestCar) == 18 then
+        TriggerEvent("ShowInformationLeft", 2000, "This is emergency")
+        TriggerEvent("ShowInformationLeft", 2000, nearestCar)
+        GiveWeapons(weapon)
     end
 end
 
@@ -66,7 +75,7 @@ RegisterCommand("sg", function()
         removeWeapon("weapon_pumpshotgun")
         TriggerEvent("ShowInformationLeft", 2000, "You stowed your Shotgun...")
         --notify('~r~Removed shotgun.')
-        sgCheckedOut = false
+        sgCheckedOut = exports.GTALife:RevoDecorSet(nearestCar, "sgEquiped", false)
     end
 end)
 
@@ -81,7 +90,7 @@ RegisterCommand("ar", function()
         removeWeapon("weapon_carbinerifle")
         TriggerEvent("ShowInformationLeft", 2000, "You stowed your Carbine Rifle...")
         --notify('~r~Removed Carbine Rifle.')
-        arCheckedOut = false
+        arCheckedOut = exports.GTALife:RevoDecorSet(nearestCar, "arEquiped", false)
     end
 end)
 
@@ -91,7 +100,7 @@ RegisterCommand("remove", function()
         removeWeapon("weapon_carbinerifle")
         TriggerEvent("ShowInformationLeft", 2000, "You stowed your Shotgun and Carbine...")
         --notify('~r~Removed Shotgun & Carbine Rifle.')
-        sgCheckedOut = false
-        arCheckedOut = false
+        sgCheckedOut = exports.GTALife:RevoDecorSet(nearestCar, "sgEquiped", false)
+        arCheckedOut = exports.GTALife:RevoDecorSet(nearestCar, "arEquiped", false)
     end
 end)
