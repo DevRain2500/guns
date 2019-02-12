@@ -54,7 +54,7 @@ RegisterCommand("sg", function()
         if exports.GTALife:countItems("Police Key Card") >= 1 then
             CheckPDVehicle("sg")
         else
-            TriggerEvent("ShowInformationLeft", 3000, "The gun lock is locked...")
+            TriggerEvent("ShowInformationLeft", 3000, "The gun is locked in place...")
         end
     else
         removeWeapon("weapon_pumpshotgun")
@@ -69,7 +69,7 @@ RegisterCommand("ar", function()
         if exports.GTALife:countItems("Police Key Card") >= 1 then
             CheckPDVehicle("ar")
         else
-            TriggerEvent("ShowInformationLeft", 3000, "The gun lock is locked...")
+            TriggerEvent("ShowInformationLeft", 3000, "The gun is locked in place...")
         end
     else
         removeWeapon("weapon_carbinerifle")
