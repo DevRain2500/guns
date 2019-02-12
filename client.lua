@@ -15,15 +15,16 @@ local pdModels = {
     "pd9",
     "pd10",
     "pd11",
+    "pdf350",
 
 }
 
 local function CheckPDVehicle(weapon)
     for i=1, #pdModels do
         local nearestCar = GetClosestVehicle(GetEntityCoords(GetPlayerPed(-1)), 2.0, GetHashKey(pdModels[i]), 0)
-        TriggerEvent("ShowInformationLeft", 2000, nearestCar)
         if GetVehicleClass(nearestCar) == 18 then
             TriggerEvent("ShowInformationLeft", 2000, "This is emergency")
+            TriggerEvent("ShowInformationLeft", 2000, nearestCar)
             if weapon == "sg" then
                 giveWeapon("weapon_pumpshotgun")
                 GiveWeaponComponentToPed(playerPed, GetHashKey("weapon_pumpshotgun"), GetHashKey("COMPONENT_AT_AR_FLSH"))
