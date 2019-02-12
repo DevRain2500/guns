@@ -37,7 +37,7 @@ local function CheckPDVehicle(weapon)
     end
 end
 
-local function GiveWeapons(weapon)
+function GiveWeapons(weapon)
     if weapon == "sg" then
         giveWeapon("weapon_pumpshotgun")
         GiveWeaponComponentToPed(playerPed, GetHashKey("weapon_pumpshotgun"), GetHashKey("COMPONENT_AT_AR_FLSH"))
