@@ -54,7 +54,7 @@ RegisterCommand("sg", function()
         if exports.GTALife:countItems("Police Key Card") >= 1 then
             CheckPDVehicle("sg")
         else
-            TriggerEvent("ShowInformationLeft", 3000, "The gun lock is locked...")
+            TriggerEvent("ShowInformationLeft", 3000, "The gun is locked in place...")
         end
     else
         removeWeapon("weapon_pumpshotgun")
@@ -73,7 +73,7 @@ RegisterCommand("ar", function()
         end
     else
         removeWeapon("weapon_carbinerifle")
-        TriggerEvent("ShowInformationLeft", 2000, "You stowed Carbine Rifle...")
+        TriggerEvent("ShowInformationLeft", 2000, "The gun is locked in place...")
         --notify('~r~Removed Carbine Rifle.')
         arCheckedOut = false
     end
