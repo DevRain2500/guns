@@ -3,7 +3,6 @@ local sgCheckedOut = false
 local playerPed = GetPlayerPed(-1)
 
 local pdModels = {
-
     "pd1",
     "pd2",
     "pd3",
@@ -23,21 +22,7 @@ local pdModels = {
     "unmarked4",
 }
 
-local function CheckPDVehicle(weapon)
-    if IsPedInAnyPoliceVehicle(playerPed) then
-        GiveWeapons(weapon)
-    end
-    for i=1, #pdModels do
-        local nearestCar = GetClosestVehicle(GetEntityCoords(playerPed), 2.0, GetHashKey(pdModels[i]), 0)
-        if GetVehicleClass(nearestCar) == 18 then
-            TriggerEvent("ShowInformationLeft", 2000, "This is emergency")
-            TriggerEvent("ShowInformationLeft", 2000, nearestCar)
-            GiveWeapons(weapon)
-        end
-    end
-end
-
-function GiveWeapons(weapon)
+local function GiveWeapons(weapon)
     if weapon == "sg" then
         giveWeapon("weapon_pumpshotgun")
         GiveWeaponComponentToPed(playerPed, GetHashKey("weapon_pumpshotgun"), GetHashKey("COMPONENT_AT_AR_FLSH"))
@@ -52,6 +37,20 @@ function GiveWeapons(weapon)
         TriggerEvent("ShowInformationLeft", 2000, "You grabbed your Carbine Rifle...")
         --notify('~g~Received Carbine Rifle.')
         arCheckedOut = true
+    end
+end
+
+local function CheckPDVehicle(weapon)
+    if IsPedInAnyPoliceVehicle(playerPed) then
+        GiveWeapons(weapon)
+    end
+    for i=1, #pdModels do
+        local nearestCar = GetClosestVehicle(GetEntityCoords(playerPed), 2.0, GetHashKey(pdModels[i]), 0)
+        if GetVehicleClass(nearestCar) == 18 then
+            TriggerEvent("ShowInformationLeft", 2000, "This is emergency")
+            TriggerEvent("ShowInformationLeft", 2000, nearestCar)
+            GiveWeapons(weapon)
+        end
     end
 end
 
@@ -90,8 +89,8 @@ RegisterCommand("remove", function()
     if exports.GTALife:countItems("Police Key Card") >= 1 then
         removeWeapon("weapon_pumpshotgun")
         removeWeapon("weapon_carbinerifle")
-        TriggerEvent("ShowInformationLeft", 2000, "You stowed the kitchen sink...")
-        notify('~r~Removed Shotgun & Carbine Rifle.')
+        TriggerEvent("ShowInformationLeft", 2000, "You stowed your Shotgun and Carbine...")
+        --notify('~r~Removed Shotgun & Carbine Rifle.')
         sgCheckedOut = false
         arCheckedOut = false
     end
